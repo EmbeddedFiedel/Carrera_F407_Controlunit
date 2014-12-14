@@ -82,7 +82,7 @@
  * @note    Requires @p CH_USE_MEMCORE.
  */
 #if !defined(CH_MEMCORE_SIZE) || defined(__DOXYGEN__)
-#define CH_MEMCORE_SIZE                 0
+#define CH_MEMCORE_SIZE                131072
 #endif
 
 /**

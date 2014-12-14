@@ -30,61 +30,83 @@ bool firstLap_2 = true;
 uint16_t lapCounter_2= 0;
 uint32_t lapTimes_2[MAX_LAPS];
 
+bool race_starting = false;
 bool race_started = false;
 
 static TimeMeasurement TimeMonitor1;
+static TimeMeasurement TimeMonitor2;
 static struct VirtualTimer raceStartTimer;
 
 bool greenLightToggle = false;
 
 void race_start_timer_handler(void *arg)
 {
-	if(raceCountdown == 5)
+	if(race_starting == true)
 	{
-		palClearPad(GPIOD, GPIOD_LED3);
-		raceCountdown--;
-		chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
-	}
-	else if(raceCountdown == 4)
-	{
-		palClearPad(GPIOD, GPIOD_LED4);
-		raceCountdown--;
-		chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
-	}
-	else if(raceCountdown == 3)
-	{
-		palClearPad(GPIOD, GPIOD_LED6);
-		raceCountdown--;
-		chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
-	}
-	else if(raceCountdown == 2)
-	{
-		palClearPad(GPIOD, GPIOD_LED5);
-		raceCountdown--;
-		chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
-	}
-	else if(raceCountdown == 1)
-	{
-		
-		raceCountdown--;
-		chVTSetI(&raceStartTimer, MS2ST(1), race_start_timer_handler, 0);
-	}
-	else if(raceCountdown == 0)
-	{
-		race_started = true;
-		if (greenLightToggle == true)
+		if(raceCountdown == 5)
+		{
+			palClearPad(GPIOD, GPIOD_LED3);
+			raceCountdown--;
+			chSysLockFromIsr();
+			chTimeNow();
+			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
+			chSysUnlockFromIsr();
+		}
+		else if(raceCountdown == 4)
 		{
 			palClearPad(GPIOD, GPIOD_LED4);
-			greenLightToggle=false;
+			raceCountdown--;
+			chSysLockFromIsr();
+			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
+			chSysUnlockFromIsr();
 		}
-		else
+		else if(raceCountdown == 3)
 		{
-			palSetPad(GPIOD, GPIOD_LED4);
-			greenLightToggle = true;
+			palClearPad(GPIOD, GPIOD_LED6);
+			raceCountdown--;
+			chSysLockFromIsr();
+			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
+			chSysUnlockFromIsr();
 		}
-		chVTSetI(&raceStartTimer, MS2ST(100), race_start_timer_handler, 0);
+		else if(raceCountdown == 2)
+		{
+			palClearPad(GPIOD, GPIOD_LED5);
+			raceCountdown--;
+			chSysLockFromIsr();
+			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
+			chSysUnlockFromIsr();
+		}
+		else if(raceCountdown == 1)
+		{
+			
+			raceCountdown--;
+			chSysLockFromIsr();
+			chVTSetI(&raceStartTimer, MS2ST(1), race_start_timer_handler, 0);
+			chSysUnlockFromIsr();
+		}
+		else if(raceCountdown == 0)
+		{
+			if(race_started !=true)
+			{
+			tmStartMeasurement(&TimeMonitor1);
+			tmStartMeasurement(&TimeMonitor2);
+			}
+			race_started = true;
+			if (greenLightToggle == true)
+			{
+				palClearPad(GPIOD, GPIOD_LED4);
+				greenLightToggle=false;
+			}
+			else
+			{
+				palSetPad(GPIOD, GPIOD_LED4);
+				greenLightToggle = true;
+			}
+			chSysLockFromIsr();
+			chVTSetI(&raceStartTimer, MS2ST(100), race_start_timer_handler, 0);
+			chSysUnlockFromIsr();
+		}
 	}
-	
 }
 
 
@@ -115,7 +137,7 @@ void rx_channel1_interrupt(EXTDriver *extp, expchannel_t channel) {
 			else
 			{
 				tmStopMeasurement(&TimeMonitor1);
-				lapTimes_1[lapCounter_1] = RTT2US(TimeMonitor1.last);
+				lapTimes_1[lapCounter_1] = RTT2MS(TimeMonitor1.last);
 				tmStartMeasurement(&TimeMonitor1);
 				lapCounter_1++;
 			}
@@ -130,21 +152,43 @@ void rx_channel1_interrupt(EXTDriver *extp, expchannel_t channel) {
 void rx_channel2_interrupt(EXTDriver *extp, expchannel_t channel) {
 		(void)extp;
 		(void)channel;
-		  
+		 	chSysLockFromIsr();
+		if (race_started == true)
+		{
+			if (firstLap_2 == true)
+			{
+				firstLap_2 = false;
+			}	
+			else
+			{
+				tmStopMeasurement(&TimeMonitor2);
+				lapTimes_2[lapCounter_2] = RTT2MS(TimeMonitor2.last);
+				tmStartMeasurement(&TimeMonitor2);
+				lapCounter_2++;
+			}
+			
+		}
+		else
+		{
+			//Fehlstart Handling tbd.
+		}
+		chSysUnlockFromIsr(); 
 }
 
 
 void button_interrupt(EXTDriver *extp, expchannel_t channel)
 {
-	if(race_started==false)
+	if(race_started==false && race_starting == false)
 	{
 		raceCountdown = 5;
+		race_starting = true;
 		palSetPad(GPIOD, GPIOD_LED5);
 		palSetPad(GPIOD, GPIOD_LED3);
 		palSetPad(GPIOD, GPIOD_LED4);
 		palSetPad(GPIOD, GPIOD_LED6);
+		chSysLock();
 		chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
-		
+		chSysUnlock();
 		firstLap_1 = true;
 		firstLap_2 = true;
 		lapCounter_1 = 0;
@@ -155,18 +199,24 @@ void button_interrupt(EXTDriver *extp, expchannel_t channel)
 			lapTimes_2[i]=0;
 		}
 	}
+	/*
 	else
 	{
 		race_started = false;
+		race_starting = false;
 		palClearPad(GPIOD, GPIOD_LED5);
 		palClearPad(GPIOD, GPIOD_LED3);
 		palClearPad(GPIOD, GPIOD_LED4);
 		palClearPad(GPIOD, GPIOD_LED6);
 	}
+	*/
 	
 }
 
 void init_Racecontrol(void)
 {
 	
+tmObjectInit(&TimeMonitor1);
+	
+tmObjectInit(&TimeMonitor2);
 }
