@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+<mavlink>
+     <version>2</version>
+     <enums>
+          <enum name="CARRERA_TYPE">
+               <description>Bike classes. This identifies the individual model.</description>
+               <entry value="0" name="CARRERA_GENERIC">
+                    <description>Generic autopilot, full support for everything</description>
+               </entry>
+          </enum>
+     </enums>
+     <messages>
+          <message id="0" name="HEARTBEAT">
+               <description>The heartbeat message shows that a system is present and responding. The type of the Bike hardware allow the receiving system to treat further messages from this system appropriate.</description>
+               <field type="uint8_t" name="type">Type of the BIKE (up to 15 types, defined in MAV_TYPE ENUM)</field>
+               <field type="uint8_t_mavlink_version" name="mavlink_version">MAVLink version</field>
+          </message>
+          <message id="150" name="LAP">
+               <description>New Lap Info Message.</description>
+               <field type="uint64_t" name="time_usec">Timestamp (microseconds, synced to UNIX time or since system boot)</field>
+               <field type="uint8_t" name="racenumber">Rennzaehler</field>
+               <field type="uint8_t" name="racetrack">Bahn 1 oder 2</field>
+               <field type="uint8_t" name="lapNumber">Runde</field>
+               <field type="uint32_t" name="time">Rundenzeit [ms]</field>
+          </message>
+          <message id="190" name="RACE_SETUP">
+               <description>Suspension setup.</description>
+               <field type="uint64_t" name="time_usec">Timestamp (microseconds, synced to UNIX time or since system boot)</field>
+               <field type="uint8_t" name="lapsCount">Anzahl der Runden</field>
+          </message>
+          <message id="191" name="RACE_START">
+               <description>Throttle setup.</description>
+               <field type="uint64_t" name="time_usec">Timestamp (microseconds, synced to UNIX time or since system boot)</field>
+               <field type="uint8_t" name="racenumber">Rennzaehler</field>
+          </message>
+          <message id="192" name="RACE_STOP">
+               <description>Wheely setup.</description>
+               <field type="uint64_t" name="time_usec">Timestamp (microseconds, synced to UNIX time or since system boot)</field>
+               <field type="uint8_t" name="racenumber">Rennzaehler</field>
+          </message>
+          <message id="193" name="RACE_STATUS">
+              <description>Wheely setup.</description>
+              <field type="uint64_t" name="time_usec">Timestamp (microseconds, synced to UNIX time or since system boot)</field>
+              <field type="uint8_t" name="raceStarted">Rennzaehler</field>
+              <field type="uint8_t" name="raceCountdown">Rennzaehler</field>
+          </message>
+          <message id="253" name="STATUSTEXT">
+               <description>Status text message. These messages are printed in yellow in the COMM console of QGroundControl. WARNING: They consume quite some bandwidth, so use only for important status and error messages. If implemented wisely, these messages are buffered on the MCU and sent only at a limited rate (e.g. 10 Hz).</description>
+               <field type="uint8_t" name="severity">Severity of status. Relies on the definitions within RFC-5424. See enum BIKE_SEVERITY.</field>
+               <field type="char[50]" name="text">Status text message, without null termination character</field>
+          </message>
+     </messages>
+</mavlink>

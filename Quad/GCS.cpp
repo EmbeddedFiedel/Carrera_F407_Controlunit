@@ -76,7 +76,14 @@ static msg_t ThreadRadio(void *arg)
 							{
 								uint8_t i = 0;
 								i++;
-								//Heartbeat
+							}
+							else if (msg.msgid == MAVLINK_MSG_ID_RACE_START)
+							{
+								startRace(0);
+							}
+							else if (msg.msgid == MAVLINK_MSG_ID_RACE_STOP)
+							{
+								stopRace(0);
 							}
 					}
 					////////////////////////////ECHO//////////////////////////////
@@ -102,7 +109,30 @@ void send_statustext(uint8_t severity, const char *text)
 	sdWrite(&SD2, buf, len);
 	//uartStartSend(&UARTD2, len, buf);
 }
-
+void send_laptime(uint32_t time, uint8_t racenumber, uint8_t racetrack, uint8_t lapnumber)
+{
+	mavlink_message_t msg;
+	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	mavlink_msg_lap_pack(1,0,&msg,0,racenumber,racetrack,lapnumber, time);
+	// Copy the message to the send buffer
+	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+    
+	// Send the message with the standard UART send function
+	sdWrite(&SD2, buf, len);
+	//uartStartSend(&UARTD2, len, buf);
+}
+void send_race_status(uint8_t raceStarted, uint8_t raceCountdown)
+{
+	mavlink_message_t msg;
+	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	mavlink_msg_race_status_pack(1,0,&msg,0,raceStarted, raceCountdown);
+	// Copy the message to the send buffer
+	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+    
+	// Send the message with the standard UART send function
+	sdWrite(&SD2, buf, len);
+	//uartStartSend(&UARTD2, len, buf);
+}
 
 void setup_Mavlink(void)
 {

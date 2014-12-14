@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Flash.h"
 
 uint8_t raceCountdown = 5;
+uint8_t currentRaceNumber = 0;
 
 bool firstLap_1 = true;
 uint16_t lapCounter_1 = 0;
@@ -43,7 +44,7 @@ static struct VirtualTimer raceStartTimer;
  * GPT2 callback.
  *      Every time the timer fires send a new sample to the output port
  */
-uint32_t ms_count;
+uint32_t ms_count = 0;
 static void gpt2_callback(GPTDriver *gptp)
 {
     /* counter to waste some time...  */
@@ -80,6 +81,7 @@ void race_start_timer_handler(void *arg)
 		{
 			palClearPad(GPIOD, GPIOD_LED3);
 			raceCountdown--;
+			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
 			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
 			chSysUnlockFromIsr();
@@ -88,6 +90,7 @@ void race_start_timer_handler(void *arg)
 		{
 			palClearPad(GPIOD, GPIOD_LED4);
 			raceCountdown--;
+			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
 			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
 			chSysUnlockFromIsr();
@@ -96,6 +99,7 @@ void race_start_timer_handler(void *arg)
 		{
 			palClearPad(GPIOD, GPIOD_LED6);
 			raceCountdown--;
+			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
 			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
 			chSysUnlockFromIsr();
@@ -104,16 +108,17 @@ void race_start_timer_handler(void *arg)
 		{
 			palClearPad(GPIOD, GPIOD_LED5);
 			raceCountdown--;
+			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
 			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
 			chSysUnlockFromIsr();
 		}
 		else if(raceCountdown == 1)
 		{
-			
 			raceCountdown--;
+			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
-			chVTSetI(&raceStartTimer, MS2ST(1), race_start_timer_handler, 0);
+			chVTSetI(&raceStartTimer, MS2ST(1500), race_start_timer_handler, 0);
 			chSysUnlockFromIsr();
 		}
 		else if(raceCountdown == 0)
@@ -122,8 +127,8 @@ void race_start_timer_handler(void *arg)
 			{
 				lastLapTime1 =ms_count;
 				lastLapTime2 =ms_count;
+				race_started = true;
 			}
-			race_started = true;
 			if (greenLightToggle == true)
 			{
 				palClearPad(GPIOD, GPIOD_LED4);
@@ -134,6 +139,7 @@ void race_start_timer_handler(void *arg)
 				palSetPad(GPIOD, GPIOD_LED4);
 				greenLightToggle = true;
 			}
+			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
 			chVTSetI(&raceStartTimer, MS2ST(100), race_start_timer_handler, 0);
 			chSysUnlockFromIsr();
@@ -165,18 +171,24 @@ void rx_channel1_interrupt(EXTDriver *extp, expchannel_t channel) {
 			if (firstLap_1 == true)
 			{
 				firstLap_1 = false;
+				chSysUnlockFromIsr();
 			}	
 			else
 			{
 				lapTimes_1[lapCounter_1] = ms_count-lastLapTime1;
+				lastLapTime1 = ms_count;
 				lapCounter_1++;
+				chSysUnlockFromIsr();
+				send_laptime(lapTimes_1[lapCounter_1-1],0,1,lapCounter_1);
 			}
+			
 		}
 		else
 		{
+			chSysUnlockFromIsr();
 			//Fehlstart Handling tbd.
 		}
-		chSysUnlockFromIsr();
+		
 }
 
 void rx_channel2_interrupt(EXTDriver *extp, expchannel_t channel) {
@@ -188,19 +200,23 @@ void rx_channel2_interrupt(EXTDriver *extp, expchannel_t channel) {
 			if (firstLap_2 == true)
 			{
 				firstLap_2 = false;
+				chSysUnlockFromIsr();
 			}	
 			else
 			{
 				lapTimes_2[lapCounter_2] = ms_count-lastLapTime2;
+				lastLapTime2 = ms_count;
 				lapCounter_2++;
+				chSysUnlockFromIsr();
+				send_laptime(lapTimes_2[lapCounter_2-1],0,2,lapCounter_2);
 			}
-			
 		}
 		else
 		{
+			chSysUnlockFromIsr(); 
 			//Fehlstart Handling tbd.
 		}
-		chSysUnlockFromIsr(); 
+		
 }
 
 
@@ -240,6 +256,55 @@ void button_interrupt(EXTDriver *extp, expchannel_t channel)
 	*/
 	
 }
+void startRace(uint8_t racenumber)
+{
+	currentRaceNumber = racenumber;
+	if(race_started==false && race_starting == false)
+	{
+		raceCountdown = 5;
+		send_race_status(race_started, raceCountdown);
+		race_starting = true;
+		palSetPad(GPIOD, GPIOD_LED5);
+		palSetPad(GPIOD, GPIOD_LED3);
+		palSetPad(GPIOD, GPIOD_LED4);
+		palSetPad(GPIOD, GPIOD_LED6);
+		chSysLock();
+		chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
+		chSysUnlock();
+		firstLap_1 = true;
+		firstLap_2 = true;
+		lapCounter_1 = 0;
+		lapCounter_2 = 0;
+		for (uint16_t i = 0; i < MAX_LAPS; i++)
+		{
+			lapTimes_1[i]=0;
+			lapTimes_2[i]=0;
+		}
+	}
+}
+
+void stopRace(uint8_t racenumber)
+{
+	race_started=false;
+	race_starting = false;
+	raceCountdown = 5;
+}
+/*
+ * Working area for MavlinkHeartbeatThread
+ */
+static WORKING_AREA(MavlinkRaceStatusThreadWorkingArea, 2048);
+/*
+ * MavlinkHeartbeatThread
+ */
+
+static msg_t MavlinkRaceStatusThread(void *arg) 
+{
+  while (TRUE) 
+  {
+		send_race_status(race_started, raceCountdown);
+		chThdSleepMilliseconds(100);
+  }
+}
 
 void init_Racecontrol(void)
 {
@@ -251,4 +316,5 @@ void init_Racecontrol(void)
     //   means we call the callback function every 125uS or 8,000 time
     //   per second
     gptStartContinuous(&GPTD2, 100); // dT = 100,000 / 100 = 1,000Hz
+	chThdCreateStatic(MavlinkRaceStatusThreadWorkingArea, sizeof(MavlinkRaceStatusThreadWorkingArea), NORMALPRIO, MavlinkRaceStatusThread, NULL);
 }
