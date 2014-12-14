@@ -25,17 +25,50 @@ uint8_t raceCountdown = 5;
 bool firstLap_1 = true;
 uint16_t lapCounter_1 = 0;
 uint32_t lapTimes_1[MAX_LAPS];
+uint32_t lastLapTime1 =0;
 
 bool firstLap_2 = true;
 uint16_t lapCounter_2= 0;
 uint32_t lapTimes_2[MAX_LAPS];
+uint32_t lastLapTime2 =0;
 
 bool race_starting = false;
 bool race_started = false;
 
-static TimeMeasurement TimeMonitor1;
-static TimeMeasurement TimeMonitor2;
+//static TimeMeasurement TimeMonitor1;
+//static TimeMeasurement TimeMonitor2;
 static struct VirtualTimer raceStartTimer;
+
+/*
+ * GPT2 callback.
+ *      Every time the timer fires send a new sample to the output port
+ */
+uint32_t ms_count;
+static void gpt2_callback(GPTDriver *gptp)
+{
+    /* counter to waste some time...  */
+	ms_count++;
+}
+	
+
+/*
+ * GPT2 configuration.
+ *   This configuration block defines a time with a 200kHz counting clock,
+ *   and our callback function named sample_output_callback.  When we start
+ *   the timer we will specify the numbers of clock ticks we want to elapse
+ *   between callback execution.
+ *
+ *   NOTE:  Be sure the execution of the callback is done before calling it
+ *            again.  Otherwise, strange things may happen....
+ *          Generally, you will want to define the callback function above
+ *            this or the compiler will complain about it being undefined.
+ */
+static GPTConfig gpt2cfg =
+{
+    100000,                    /* timer clock.*/
+    gpt2_callback     				/* Timer callback.*/
+};
+
 
 bool greenLightToggle = false;
 
@@ -48,7 +81,6 @@ void race_start_timer_handler(void *arg)
 			palClearPad(GPIOD, GPIOD_LED3);
 			raceCountdown--;
 			chSysLockFromIsr();
-			chTimeNow();
 			chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
 			chSysUnlockFromIsr();
 		}
@@ -88,8 +120,8 @@ void race_start_timer_handler(void *arg)
 		{
 			if(race_started !=true)
 			{
-			tmStartMeasurement(&TimeMonitor1);
-			tmStartMeasurement(&TimeMonitor2);
+				lastLapTime1 =ms_count;
+				lastLapTime2 =ms_count;
 			}
 			race_started = true;
 			if (greenLightToggle == true)
@@ -136,9 +168,7 @@ void rx_channel1_interrupt(EXTDriver *extp, expchannel_t channel) {
 			}	
 			else
 			{
-				tmStopMeasurement(&TimeMonitor1);
-				lapTimes_1[lapCounter_1] = RTT2MS(TimeMonitor1.last);
-				tmStartMeasurement(&TimeMonitor1);
+				lapTimes_1[lapCounter_1] = ms_count-lastLapTime1;
 				lapCounter_1++;
 			}
 		}
@@ -161,9 +191,7 @@ void rx_channel2_interrupt(EXTDriver *extp, expchannel_t channel) {
 			}	
 			else
 			{
-				tmStopMeasurement(&TimeMonitor2);
-				lapTimes_2[lapCounter_2] = RTT2MS(TimeMonitor2.last);
-				tmStartMeasurement(&TimeMonitor2);
+				lapTimes_2[lapCounter_2] = ms_count-lastLapTime2;
 				lapCounter_2++;
 			}
 			
@@ -215,8 +243,12 @@ void button_interrupt(EXTDriver *extp, expchannel_t channel)
 
 void init_Racecontrol(void)
 {
-	
-tmObjectInit(&TimeMonitor1);
-	
-tmObjectInit(&TimeMonitor2);
+	  // configure the GPT timer
+    gptStart(&GPTD2, &gpt2cfg);
+			// start the GPT in continuous mode.  dT is the time between triggers
+    //   Here, we have set the timer clock to 200,000Hz, and we want
+    //   to call the callback function every 25 GPT clock cycles.  This
+    //   means we call the callback function every 125uS or 8,000 time
+    //   per second
+    gptStartContinuous(&GPTD2, 100); // dT = 100,000 / 100 = 1,000Hz
 }
