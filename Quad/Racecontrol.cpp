@@ -80,6 +80,7 @@ void race_start_timer_handler(void *arg)
 		if(raceCountdown == 5)
 		{
 			palClearPad(GPIOD, GPIOD_LED3);
+			palSetPad(GPIOE, GPIOE_Start_LED1);
 			raceCountdown--;
 			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
@@ -89,6 +90,7 @@ void race_start_timer_handler(void *arg)
 		else if(raceCountdown == 4)
 		{
 			palClearPad(GPIOD, GPIOD_LED4);
+			palSetPad(GPIOE, GPIOE_Start_LED2);
 			raceCountdown--;
 			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
@@ -98,6 +100,7 @@ void race_start_timer_handler(void *arg)
 		else if(raceCountdown == 3)
 		{
 			palClearPad(GPIOD, GPIOD_LED6);
+			palSetPad(GPIOE, GPIOE_Start_LED3);
 			raceCountdown--;
 			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
@@ -107,6 +110,7 @@ void race_start_timer_handler(void *arg)
 		else if(raceCountdown == 2)
 		{
 			palClearPad(GPIOD, GPIOD_LED5);
+			palSetPad(GPIOE, GPIOE_Start_LED4);
 			raceCountdown--;
 			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
@@ -115,6 +119,7 @@ void race_start_timer_handler(void *arg)
 		}
 		else if(raceCountdown == 1)
 		{
+			palSetPad(GPIOE, GPIOE_Start_LED5);
 			raceCountdown--;
 			send_race_status(race_started, raceCountdown);
 			chSysLockFromIsr();
@@ -125,6 +130,12 @@ void race_start_timer_handler(void *arg)
 		{
 			if(race_started !=true)
 			{
+				
+				palClearPad(GPIOE, GPIOE_Start_LED1);
+				palClearPad(GPIOE, GPIOE_Start_LED2);
+				palClearPad(GPIOE, GPIOE_Start_LED3);
+				palClearPad(GPIOE, GPIOE_Start_LED4);
+				palClearPad(GPIOE, GPIOE_Start_LED5);
 				lastLapTime1 =ms_count;
 				lastLapTime2 =ms_count;
 				race_started = true;
@@ -268,6 +279,11 @@ void startRace(uint8_t racenumber)
 		palSetPad(GPIOD, GPIOD_LED3);
 		palSetPad(GPIOD, GPIOD_LED4);
 		palSetPad(GPIOD, GPIOD_LED6);
+		palClearPad(GPIOE, GPIOE_Start_LED1);
+		palClearPad(GPIOE, GPIOE_Start_LED2);
+		palClearPad(GPIOE, GPIOE_Start_LED3);
+		palClearPad(GPIOE, GPIOE_Start_LED4);
+		palClearPad(GPIOE, GPIOE_Start_LED5);
 		chSysLock();
 		chVTSetI(&raceStartTimer, MS2ST(1000), race_start_timer_handler, 0);
 		chSysUnlock();
@@ -317,4 +333,16 @@ void init_Racecontrol(void)
     //   per second
     gptStartContinuous(&GPTD2, 100); // dT = 100,000 / 100 = 1,000Hz
 	chThdCreateStatic(MavlinkRaceStatusThreadWorkingArea, sizeof(MavlinkRaceStatusThreadWorkingArea), NORMALPRIO, MavlinkRaceStatusThread, NULL);
+}
+
+bool getRaceStartedOrStarting(void)
+{
+	if(	race_started==true || race_starting == true)
+	{
+		return true;
+	}
+	else
+	{
+		return false;	
+	}
 }

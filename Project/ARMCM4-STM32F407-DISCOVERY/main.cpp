@@ -36,7 +36,7 @@
 #include "flash.h"
 
 
-
+bool ledToggle = 0;
 /*
  * Application entry point.
  */
@@ -62,15 +62,41 @@ int main(void)
 		palClearPad(GPIOD, GPIOD_LED3);
 		palClearPad(GPIOD, GPIOD_LED4);
 		palClearPad(GPIOD, GPIOD_LED6);
+	
+		palSetPad(GPIOE, GPIOE_Start_LED1);
+		palSetPad(GPIOE, GPIOE_Start_LED2);
+		palSetPad(GPIOE, GPIOE_Start_LED3);
+		palSetPad(GPIOE, GPIOE_Start_LED4);
+		palSetPad(GPIOE, GPIOE_Start_LED5);
+		ledToggle = true;
+		
 	while (TRUE) 
 	{
 // 		//update_IMU();
 // 		palSetPad(GPIOD, GPIOD_LED3);
 // 		chThdSleepMilliseconds(200);
-// 	//	if(get_mpu_ready())
-// 		{
-// 			palSetPad(GPIOD, GPIOD_LED4);      /* Orange.  */
-// 		}
+		
+			if(!getRaceStartedOrStarting())
+			{
+				if(ledToggle == true)
+				{
+					palClearPad(GPIOE, GPIOE_Start_LED1);
+					palClearPad(GPIOE, GPIOE_Start_LED2);
+					palClearPad(GPIOE, GPIOE_Start_LED3);
+					palClearPad(GPIOE, GPIOE_Start_LED4);
+					palClearPad(GPIOE, GPIOE_Start_LED5);
+					ledToggle = false;
+				}
+				else
+				{
+					palSetPad(GPIOE, GPIOE_Start_LED1);
+					palSetPad(GPIOE, GPIOE_Start_LED2);
+					palSetPad(GPIOE, GPIOE_Start_LED3);
+					palSetPad(GPIOE, GPIOE_Start_LED4);
+					palSetPad(GPIOE, GPIOE_Start_LED5);	
+					ledToggle = true;
+				}
+			}// 		}
 // 		chThdSleepMilliseconds(200);
 
 // 		//if(get_rc_calibration_ready())
@@ -89,7 +115,7 @@ int main(void)
 // 		palClearPad(GPIOD, GPIOD_LED3);
 // 		palClearPad(GPIOD, GPIOD_LED4);
 // 		palClearPad(GPIOD, GPIOD_LED6);
-		chThdSleepMilliseconds(200);
+		chThdSleepMilliseconds(1000);
   }
 }
 

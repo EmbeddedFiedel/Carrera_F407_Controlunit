@@ -93,6 +93,13 @@
 #define GPIOE_INT1              0
 #define GPIOE_INT2              1
 #define GPIOE_CS_SPI            3
+#define GPIOE_Start_LED1        4
+#define GPIOE_Start_LED2        5
+#define GPIOE_Start_LED3        6
+#define GPIOE_Start_LED4        7
+#define GPIOE_Start_LED5        8
+#define GPIOE_Lichtschranke1    10
+#define GPIOE_Lichtschranke2    12
 
 #define GPIOH_OSC_IN            0
 #define GPIOH_OSC_OUT           1
@@ -324,20 +331,28 @@
  * PE0  - GPIOE_INT1                (input floating).
  * PE1  - GPIOE_INT2                (input floating).
  * PE3  - GPIOE_CS_SPI              (output push-pull).
+ * PE4  - GPIOE_Start_LED1          (output push-pull).
+ * PE5  - GPIOE_Start_LED2          (output push-pull).
+ * PE6  - GPIOE_Start_LED3          (output push-pull).
+ * PE7  - GPIOE_Start_LED4          (output push-pull).
+ * PE8  - GPIOE_Start_LED5          (output push-pull).
+ * PE10  - GPIOE_Lichtschranke1     (input floating).
+ * PE12  - GPIOE_Lichtschranke2     (input floating).
+ 
  */
 #define VAL_GPIOE_MODER     (PIN_MODE_INPUT(GPIOE_INT1) |                   \
                              PIN_MODE_INPUT(GPIOE_INT2) |                   \
                              PIN_MODE_INPUT(2) |                            \
                              PIN_MODE_OUTPUT(GPIOE_CS_SPI) |                \
-                             PIN_MODE_INPUT(4) |                            \
-                             PIN_MODE_INPUT(5) |                            \
-                             PIN_MODE_INPUT(6) |                            \
-                             PIN_MODE_INPUT(7) |                            \
-                             PIN_MODE_INPUT(8) |                            \
+                             PIN_MODE_OUTPUT(GPIOE_Start_LED1) |                            \
+                             PIN_MODE_OUTPUT(GPIOE_Start_LED2) |                            \
+                             PIN_MODE_OUTPUT(GPIOE_Start_LED3) |                            \
+                             PIN_MODE_OUTPUT(GPIOE_Start_LED4) |                            \
+                             PIN_MODE_OUTPUT(GPIOE_Start_LED5) |                            \
                              PIN_MODE_INPUT(9) |                            \
-                             PIN_MODE_INPUT(10) |                           \
+                             PIN_MODE_INPUT(GPIOE_Lichtschranke1) |         \
                              PIN_MODE_INPUT(11) |                           \
-                             PIN_MODE_INPUT(12) |                           \
+                             PIN_MODE_INPUT(GPIOE_Lichtschranke2) |         \
                              PIN_MODE_INPUT(13) |                           \
                              PIN_MODE_INPUT(14) |                           \
                              PIN_MODE_INPUT(15))
@@ -347,15 +362,15 @@
                              PIN_PUDR_FLOATING(GPIOE_INT2) |                \
                              PIN_PUDR_PULLUP(2) |                           \
                              PIN_PUDR_FLOATING(GPIOE_CS_SPI) |              \
-                             PIN_PUDR_PULLUP(4) |                           \
-                             PIN_PUDR_PULLUP(5) |                           \
-                             PIN_PUDR_PULLUP(6) |                           \
-                             PIN_PUDR_PULLUP(7) |                           \
-                             PIN_PUDR_PULLUP(8) |                           \
+                             PIN_PUDR_FLOATING(GPIOE_Start_LED1) |          \
+                             PIN_PUDR_FLOATING(GPIOE_Start_LED2) |          \
+                             PIN_PUDR_FLOATING(GPIOE_Start_LED3) |          \
+                             PIN_PUDR_FLOATING(GPIOE_Start_LED4) |          \
+                             PIN_PUDR_FLOATING(GPIOE_Start_LED5) |          \
                              PIN_PUDR_PULLUP(9) |                           \
-                             PIN_PUDR_PULLUP(10) |                          \
+                             PIN_PUDR_FLOATING(GPIOE_Lichtschranke1) |      \
                              PIN_PUDR_PULLUP(11) |                          \
-                             PIN_PUDR_PULLUP(12) |                          \
+                             PIN_PUDR_FLOATING(GPIOE_Lichtschranke2) |      \
                              PIN_PUDR_PULLUP(13) |                          \
                              PIN_PUDR_PULLUP(14) |                          \
                              PIN_PUDR_PULLUP(15))
