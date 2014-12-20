@@ -36,7 +36,7 @@ static msg_t MavlinkHeartbeatThread(void *arg)
   while (TRUE) 
   {
 		send_heartbeat();	 
-		chThdSleepMilliseconds(100);
+		chThdSleepMilliseconds(1000);
   }
 }
 
@@ -84,6 +84,12 @@ static msg_t ThreadRadio(void *arg)
 							else if (msg.msgid == MAVLINK_MSG_ID_RACE_STOP)
 							{
 								stopRace(0);
+							}
+							else if (msg.msgid == MAVLINK_MSG_ID_LAP)
+							{
+								mavlink_lap_t lap_msg;
+                mavlink_msg_lap_decode(&msg, &lap_msg);
+								resendLapTime(lap_msg.racetrack,lap_msg.lapNumber);
 							}
 					}
 					////////////////////////////ECHO//////////////////////////////

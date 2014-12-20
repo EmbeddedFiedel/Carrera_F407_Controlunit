@@ -1,0 +1,544 @@
+ARM Linker, 5.03 [Build 24] [MDK-ARM Lite]
+
+==============================================================================
+
+Section Cross References
+
+    board.o(.text) refers to hal_lld.o(.text) for stm32_clock_init
+    cstartup.o(MSTACK) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    cstartup.o(CSTACK) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    cstartup.o(HEAP) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    cstartup.o(.text) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    cstartup.o(.text) refers to board.o(.text) for __early_init
+    cstartup.o(.text) refers to cstartup.o(CSTACK) for __initial_sp
+    cstartup.o(.text) refers to __main.o(!!!main) for __main
+    cstartup.o(.text) refers to cstartup.o(HEAP) for Heap_Mem
+    chcoreasm_v7m.o(.text) refers to chthreads.o(.text) for chThdExit
+    chcoreasm_v7m.o(.text) refers to chschd.o(.text) for chSchDoReschedule
+    chcore_v7m.o(.text) refers to chsys.o(.text) for chSysTimerHandlerI
+    chcore_v7m.o(.text) refers to nvic.o(.text) for nvicSetSystemHandlerPriority
+    chcore_v7m.o(.text) refers to chschd.o(.bss) for rlist
+    chcore_v7m.o(.text) refers to chcoreasm_v7m.o(.text) for _port_switch_from_isr
+    vectors.o(RESET) refers to cstartup.o(MSTACK) for __initial_msp
+    vectors.o(RESET) refers to cstartup.o(.text) for Reset_Handler
+    vectors.o(RESET) refers to vectors.o(.text) for NMIVector
+    vectors.o(RESET) refers to chcore_v7m.o(.text) for SVCallVector
+    vectors.o(RESET) refers to ext_lld.o(.text) for Vector44
+    vectors.o(RESET) refers to stm32_dma.o(.text) for Vector6C
+    vectors.o(RESET) refers to adc_lld.o(.text) for Vector88
+    vectors.o(RESET) refers to gpt_lld.o(.text) for VectorB0
+    vectors.o(RESET) refers to pwm_lld.o(.text) for VectorB8
+    vectors.o(RESET) refers to i2c_lld.o(.text) for VectorBC
+    vectors.o(RESET) refers to serial_lld.o(.text) for VectorD8
+    chcond.o(.text) refers to chschd.o(.text) for chSchWakeupS
+    chcond.o(.text) refers to chmtx.o(.text) for chMtxUnlockS
+    chcond.o(.text) refers to chschd.o(.bss) for rlist
+    chdynamic.o(.text) refers to chheap.o(.text) for chHeapFree
+    chdynamic.o(.text) refers to chmempools.o(.text) for chPoolFree
+    chdynamic.o(.text) refers to chthreads.o(.text) for chThdCreateI
+    chdynamic.o(.text) refers to chschd.o(.text) for chSchWakeupS
+    chevents.o(.text) refers to chschd.o(.text) for chSchReadyI
+    chevents.o(.text) refers to chschd.o(.bss) for rlist
+    chheap.o(.text) refers to chmtx.o(.text) for chMtxInit
+    chheap.o(.text) refers to chmemcore.o(.text) for chCoreAlloc
+    chheap.o(.text) refers to chheap.o(.bss) for default_heap
+    chmboxes.o(.text) refers to chsem.o(.text) for chSemInit
+    chmboxes.o(.text) refers to chschd.o(.text) for chSchRescheduleS
+    chmemcore.o(.text) refers to chmemcore.o(.bss) for buffer
+    chmemcore.o(.text) refers to chmemcore.o(.data) for nextmem
+    chmsg.o(.text) refers to chschd.o(.text) for chSchReadyI
+    chmsg.o(.text) refers to chschd.o(.bss) for rlist
+    chmtx.o(.text) refers to chschd.o(.text) for chSchReadyI
+    chmtx.o(.text) refers to chschd.o(.bss) for rlist
+    chqueues.o(.text) refers to chschd.o(.text) for chSchGoSleepTimeoutS
+    chqueues.o(.text) refers to chschd.o(.bss) for rlist
+    chregistry.o(.text) refers to chdynamic.o(.text) for chThdRelease
+    chregistry.o(.text) refers to chschd.o(.bss) for rlist
+    chschd.o(.text) refers to chcoreasm_v7m.o(.text) for _port_switch
+    chschd.o(.text) refers to chvt.o(.text) for chVTSetI
+    chschd.o(.text) refers to chschd.o(.bss) for rlist
+    chsem.o(.text) refers to chschd.o(.text) for chSchReadyI
+    chsem.o(.text) refers to chschd.o(.bss) for rlist
+    chsys.o(.text) refers to chcore_v7m.o(.text) for _port_init
+    chsys.o(.text) refers to chschd.o(.text) for _scheduler_init
+    chsys.o(.text) refers to chvt.o(.text) for _vt_init
+    chsys.o(.text) refers to chmemcore.o(.text) for _core_init
+    chsys.o(.text) refers to chheap.o(.text) for _heap_init
+    chsys.o(.text) refers to chthreads.o(.text) for _thread_init
+    chsys.o(.text) refers to chschd.o(.bss) for rlist
+    chsys.o(.text) refers to chsys.o(.bss) for mainthread
+    chsys.o(.text) refers to chvt.o(.bss) for vtlist
+    chthreads.o(.text) refers to chschd.o(.text) for chSchWakeupS
+    chthreads.o(.text) refers to chdynamic.o(.text) for chThdRelease
+    chthreads.o(.text) refers to chschd.o(.bss) for rlist
+    chthreads.o(.text) refers to chcoreasm_v7m.o(.text) for _port_thread_start
+    chthreads.o(.text) refers to chvt.o(.bss) for vtlist
+    chvt.o(.text) refers to chvt.o(.bss) for vtlist
+    adc.o(.text) refers to adc_lld.o(.text) for adc_lld_init
+    adc.o(.text) refers to chmtx.o(.text) for chMtxInit
+    adc.o(.text) refers to chschd.o(.text) for chSchWakeupS
+    adc.o(.text) refers to chschd.o(.bss) for rlist
+    hal.o(.text) refers to hal_lld.o(.text) for hal_lld_init
+    hal.o(.text) refers to tm.o(.text) for tmInit
+    hal.o(.text) refers to pal_lld.o(.text) for _pal_lld_init
+    hal.o(.text) refers to adc.o(.text) for adcInit
+    hal.o(.text) refers to ext.o(.text) for extInit
+    hal.o(.text) refers to gpt.o(.text) for gptInit
+    hal.o(.text) refers to i2c.o(.text) for i2cInit
+    hal.o(.text) refers to pwm.o(.text) for pwmInit
+    hal.o(.text) refers to serial.o(.text) for sdInit
+    hal.o(.text) refers to spi.o(.text) for spiInit
+    hal.o(.text) refers to mmc_spi.o(.text) for mmcInit
+    hal.o(.text) refers to board.o(.text) for boardInit
+    hal.o(.text) refers to board.o(.constdata) for pal_default_config
+    pal.o(.text) refers to pal_lld.o(.text) for _pal_lld_setgroupmode
+    pwm.o(.text) refers to pwm_lld.o(.text) for pwm_lld_init
+    serial.o(.text) refers to chqueues.o(.text) for chOQWriteTimeout
+    serial.o(.text) refers to serial_lld.o(.text) for sd_lld_init
+    serial.o(.text) refers to chschd.o(.text) for chSchRescheduleS
+    serial.o(.text) refers to chevents.o(.text) for chEvtBroadcastFlagsI
+    serial.o(.text) refers to serial.o(.constdata) for vmt
+    serial.o(.constdata) refers to serial.o(.text) for writes
+    spi.o(.text) refers to spi_lld.o(.text) for spi_lld_init
+    spi.o(.text) refers to chmtx.o(.text) for chMtxInit
+    spi.o(.text) refers to chschd.o(.text) for chSchGoSleepS
+    spi.o(.text) refers to chschd.o(.bss) for rlist
+    i2c.o(.text) refers to i2c_lld.o(.text) for i2c_lld_init
+    i2c.o(.text) refers to chmtx.o(.text) for chMtxInit
+    ext.o(.text) refers to ext_lld.o(.text) for ext_lld_init
+    ext_lld.o(.text) refers to chcore_v7m.o(.text) for _port_irq_epilogue
+    ext_lld.o(.text) refers to ext.o(.text) for extObjectInit
+    ext_lld.o(.text) refers to nvic.o(.text) for nvicEnableVector
+    ext_lld.o(.text) refers to ext_lld.o(.data) for EXTD1
+    mmc_spi.o(.text) refers to chevents.o(.text) for chEvtBroadcastFlagsI
+    mmc_spi.o(.text) refers to chvt.o(.text) for chVTSetI
+    mmc_spi.o(.text) refers to spi.o(.text) for spiReceive
+    mmc_spi.o(.text) refers to chthreads.o(.text) for chThdSleep
+    mmc_spi.o(.text) refers to mmc_spi.o(.constdata) for crc7_lookup_table
+    tm.o(.text) refers to tm.o(.data) for measurement_offset
+    gpt.o(.text) refers to gpt_lld.o(.text) for gpt_lld_init
+    adc_lld.o(.text) refers to chschd.o(.text) for chSchReadyI
+    adc_lld.o(.text) refers to chcore_v7m.o(.text) for _port_irq_epilogue
+    adc_lld.o(.text) refers to adc.o(.text) for adcObjectInit
+    adc_lld.o(.text) refers to nvic.o(.text) for nvicEnableVector
+    adc_lld.o(.text) refers to stm32_dma.o(.text) for dmaStreamAllocate
+    adc_lld.o(.text) refers to adc_lld.o(.bss) for ADCD1
+    adc_lld.o(.text) refers to stm32_dma.o(.constdata) for _stm32_dma_streams
+    hal_lld.o(.text) refers to stm32_dma.o(.text) for dmaInit
+    pwm_lld.o(.text) refers to chcore_v7m.o(.text) for _port_irq_epilogue
+    pwm_lld.o(.text) refers to pwm.o(.text) for pwmObjectInit
+    pwm_lld.o(.text) refers to nvic.o(.text) for nvicEnableVector
+    pwm_lld.o(.text) refers to pwm_lld.o(.bss) for PWMD4
+    serial_lld.o(.text) refers to chevents.o(.text) for chEvtBroadcastFlagsI
+    serial_lld.o(.text) refers to serial.o(.text) for sdIncomingDataI
+    serial_lld.o(.text) refers to chqueues.o(.text) for chOQGetI
+    serial_lld.o(.text) refers to chcore_v7m.o(.text) for _port_irq_epilogue
+    serial_lld.o(.text) refers to nvic.o(.text) for nvicEnableVector
+    serial_lld.o(.text) refers to serial_lld.o(.bss) for SD2
+    serial_lld.o(.text) refers to serial_lld.o(.constdata) for default_config
+    spi_lld.o(.text) refers to chcore.o(.text) for port_halt
+    spi_lld.o(.text) refers to chschd.o(.text) for chSchReadyI
+    spi_lld.o(.text) refers to spi.o(.text) for spiObjectInit
+    spi_lld.o(.text) refers to stm32_dma.o(.text) for dmaStreamAllocate
+    spi_lld.o(.text) refers to spi_lld.o(.data) for dummytx
+    spi_lld.o(.text) refers to spi_lld.o(.bss) for SPID1
+    spi_lld.o(.text) refers to stm32_dma.o(.constdata) for _stm32_dma_streams
+    stm32_dma.o(.text) refers to chcore_v7m.o(.text) for _port_irq_epilogue
+    stm32_dma.o(.text) refers to nvic.o(.text) for nvicEnableVector
+    stm32_dma.o(.text) refers to stm32_dma.o(.bss) for dma_isr_redir
+    stm32_dma.o(.text) refers to stm32_dma.o(.data) for dma_streams_mask
+    stm32_dma.o(.text) refers to stm32_dma.o(.constdata) for _stm32_dma_streams
+    i2c_lld.o(.text) refers to chschd.o(.text) for chSchReadyI
+    i2c_lld.o(.text) refers to chcore.o(.text) for port_halt
+    i2c_lld.o(.text) refers to chcore_v7m.o(.text) for _port_irq_epilogue
+    i2c_lld.o(.text) refers to i2c.o(.text) for i2cObjectInit
+    i2c_lld.o(.text) refers to stm32_dma.o(.text) for dmaStreamAllocate
+    i2c_lld.o(.text) refers to nvic.o(.text) for nvicEnableVector
+    i2c_lld.o(.text) refers to i2c_lld.o(.bss) for I2CD1
+    i2c_lld.o(.text) refers to stm32_dma.o(.constdata) for _stm32_dma_streams
+    i2c_lld.o(.text) refers to chvt.o(.text) for chVTSetI
+    i2c_lld.o(.text) refers to chschd.o(.bss) for rlist
+    gpt_lld.o(.text) refers to chcore_v7m.o(.text) for _port_irq_epilogue
+    gpt_lld.o(.text) refers to gpt.o(.text) for gptObjectInit
+    gpt_lld.o(.text) refers to nvic.o(.text) for nvicEnableVector
+    gpt_lld.o(.text) refers to gpt_lld.o(.bss) for GPTD2
+    test.o(.text) refers to chvt.o(.text) for chTimeIsWithin
+    test.o(.text) refers to chthreads.o(.text) for chThdTerminate
+    test.o(.text) refers to test.o(.data) for chp
+    test.o(.text) refers to test.o(.bss) for tokens_buffer
+    test.o(.text) refers to chschd.o(.bss) for rlist
+    test.o(.text) refers to chvt.o(.bss) for vtlist
+    test.o(.constdata) refers to test.o(.bss) for test
+    test.o(.data) refers to testthd.o(.constdata) for patternthd
+    test.o(.data) refers to testsem.o(.constdata) for patternsem
+    test.o(.data) refers to testmtx.o(.constdata) for patternmtx
+    test.o(.data) refers to testmsg.o(.constdata) for patternmsg
+    test.o(.data) refers to testmbox.o(.constdata) for patternmbox
+    test.o(.data) refers to testevt.o(.constdata) for patternevt
+    test.o(.data) refers to testheap.o(.constdata) for patternheap
+    test.o(.data) refers to testpools.o(.constdata) for patternpools
+    test.o(.data) refers to testdyn.o(.constdata) for patterndyn
+    test.o(.data) refers to testqueues.o(.constdata) for patternqueues
+    test.o(.data) refers to testbmk.o(.constdata) for patternbmk
+    testbmk.o(.text) refers to chmsg.o(.text) for chMsgWait
+    testbmk.o(.text) refers to test.o(.text) for test_wait_tick
+    testbmk.o(.text) refers to chthreads.o(.text) for chThdCreateStatic
+    testbmk.o(.text) refers to chschd.o(.text) for chSchGoSleepS
+    testbmk.o(.text) refers to chsem.o(.text) for chSemWait
+    testbmk.o(.text) refers to test.o(.data) for test_timer_done
+    testbmk.o(.text) refers to chschd.o(.bss) for rlist
+    testbmk.o(.text) refers to test.o(.constdata) for wa
+    testbmk.o(.text) refers to test.o(.bss) for threads
+    testbmk.o(.text) refers to testbmk.o(.bss) for sem1
+    testbmk.o(.text) refers to chqueues.o(.text) for chIQInit
+    testbmk.o(.text) refers to chvt.o(.text) for chVTSetI
+    testbmk.o(.text) refers to chmtx.o(.text) for chMtxInit
+    testbmk.o(.constdata) refers to testbmk.o(.conststring) for .conststring
+    testbmk.o(.constdata) refers to testbmk.o(.text) for bmk1_execute
+    testdyn.o(.text) refers to test.o(.text) for test_emit_token
+    testdyn.o(.text) refers to chheap.o(.text) for chHeapInit
+    testdyn.o(.text) refers to chdynamic.o(.text) for chThdCreateFromHeap
+    testdyn.o(.text) refers to chmempools.o(.text) for chPoolInit
+    testdyn.o(.text) refers to chregistry.o(.text) for chRegFirstThread
+    testdyn.o(.text) refers to chthreads.o(.text) for chThdSleep
+    testdyn.o(.text) refers to test.o(.bss) for test
+    testdyn.o(.text) refers to testdyn.o(.bss) for heap1
+    testdyn.o(.text) refers to chschd.o(.bss) for rlist
+    testdyn.o(.text) refers to test.o(.constdata) for wa
+    testdyn.o(.constdata) refers to testdyn.o(.conststring) for .conststring
+    testdyn.o(.constdata) refers to testdyn.o(.text) for dyn1_setup
+    testevt.o(.text) refers to chevents.o(.text) for chEvtClearFlags
+    testevt.o(.text) refers to test.o(.text) for test_emit_token
+    testevt.o(.text) refers to chthreads.o(.text) for chThdSleep
+    testevt.o(.text) refers to testevt.o(.data) for es1
+    testevt.o(.text) refers to testevt.o(.constdata) for evhndl
+    testevt.o(.text) refers to chvt.o(.bss) for vtlist
+    testevt.o(.text) refers to chschd.o(.bss) for rlist
+    testevt.o(.text) refers to test.o(.constdata) for wa
+    testevt.o(.text) refers to test.o(.bss) for threads
+    testevt.o(.constdata) refers to testevt.o(.text) for h1
+    testevt.o(.constdata) refers to testevt.o(.conststring) for .conststring
+    testheap.o(.text) refers to chheap.o(.text) for chHeapInit
+    testheap.o(.text) refers to chmemcore.o(.text) for chCoreStatus
+    testheap.o(.text) refers to test.o(.text) for _test_assert
+    testheap.o(.text) refers to test.o(.bss) for test
+    testheap.o(.text) refers to testheap.o(.bss) for test_heap
+    testheap.o(.constdata) refers to testheap.o(.conststring) for .conststring
+    testheap.o(.constdata) refers to testheap.o(.text) for heap1_setup
+    testmbox.o(.text) refers to chmboxes.o(.text) for chMBInit
+    testmbox.o(.text) refers to test.o(.text) for _test_assert
+    testmbox.o(.text) refers to test.o(.bss) for test
+    testmbox.o(.text) refers to testmbox.o(.data) for mb1
+    testmbox.o(.constdata) refers to testmbox.o(.conststring) for .conststring
+    testmbox.o(.constdata) refers to testmbox.o(.text) for mbox1_setup
+    testmbox.o(.data) refers to test.o(.bss) for test
+    testmsg.o(.text) refers to chmsg.o(.text) for chMsgSend
+    testmsg.o(.text) refers to chthreads.o(.text) for chThdCreateStatic
+    testmsg.o(.text) refers to test.o(.text) for test_emit_token
+    testmsg.o(.text) refers to chschd.o(.bss) for rlist
+    testmsg.o(.text) refers to test.o(.constdata) for wa
+    testmsg.o(.text) refers to test.o(.bss) for threads
+    testmsg.o(.constdata) refers to testmsg.o(.conststring) for .conststring
+    testmsg.o(.constdata) refers to testmsg.o(.text) for msg1_execute
+    testmtx.o(.text) refers to chmtx.o(.text) for chMtxInit
+    testmtx.o(.text) refers to test.o(.text) for test_emit_token
+    testmtx.o(.text) refers to chthreads.o(.text) for chThdCreateStatic
+    testmtx.o(.text) refers to testmtx.o(.data) for m1
+    testmtx.o(.text) refers to chschd.o(.bss) for rlist
+    testmtx.o(.text) refers to test.o(.constdata) for wa
+    testmtx.o(.text) refers to test.o(.bss) for threads
+    testmtx.o(.text) refers to chvt.o(.bss) for vtlist
+    testmtx.o(.text) refers to chcond.o(.text) for chCondInit
+    testmtx.o(.text) refers to chschd.o(.text) for chSchRescheduleS
+    testmtx.o(.constdata) refers to testmtx.o(.conststring) for .conststring
+    testmtx.o(.constdata) refers to testmtx.o(.text) for mtx1_setup
+    testpools.o(.text) refers to chmempools.o(.text) for chPoolInit
+    testpools.o(.text) refers to test.o(.text) for _test_assert
+    testpools.o(.text) refers to testpools.o(.data) for mp1
+    testpools.o(.text) refers to test.o(.constdata) for wa
+    testpools.o(.constdata) refers to testpools.o(.conststring) for .conststring
+    testpools.o(.constdata) refers to testpools.o(.text) for pools1_setup
+    testqueues.o(.text) refers to chqueues.o(.text) for chIQInit
+    testqueues.o(.text) refers to test.o(.text) for _test_assert
+    testqueues.o(.text) refers to chthreads.o(.text) for chThdCreateStatic
+    testqueues.o(.text) refers to test.o(.constdata) for wa
+    testqueues.o(.text) refers to testqueues.o(.data) for iq
+    testqueues.o(.text) refers to chschd.o(.bss) for rlist
+    testqueues.o(.text) refers to test.o(.bss) for threads
+    testqueues.o(.constdata) refers to testqueues.o(.conststring) for .conststring
+    testqueues.o(.constdata) refers to testqueues.o(.text) for queues1_setup
+    testqueues.o(.data) refers to test.o(.bss) for test
+    testqueues.o(.data) refers to testqueues.o(.text) for notify
+    testsem.o(.text) refers to chsem.o(.text) for chSemInit
+    testsem.o(.text) refers to test.o(.text) for test_emit_token
+    testsem.o(.text) refers to chthreads.o(.text) for chThdCreateStatic
+    testsem.o(.text) refers to chschd.o(.text) for chSchRescheduleS
+    testsem.o(.text) refers to testsem.o(.data) for sem1
+    testsem.o(.text) refers to chschd.o(.bss) for rlist
+    testsem.o(.text) refers to test.o(.constdata) for wa
+    testsem.o(.text) refers to test.o(.bss) for threads
+    testsem.o(.text) refers to chvt.o(.bss) for vtlist
+    testsem.o(.constdata) refers to testsem.o(.conststring) for .conststring
+    testsem.o(.constdata) refers to testsem.o(.text) for sem1_setup
+    testthd.o(.text) refers to test.o(.text) for test_emit_token
+    testthd.o(.text) refers to chthreads.o(.text) for chThdCreateStatic
+    testthd.o(.text) refers to chschd.o(.bss) for rlist
+    testthd.o(.text) refers to test.o(.constdata) for wa
+    testthd.o(.text) refers to test.o(.bss) for threads
+    testthd.o(.text) refers to chvt.o(.bss) for vtlist
+    testthd.o(.constdata) refers to testthd.o(.conststring) for .conststring
+    testthd.o(.constdata) refers to testthd.o(.text) for thd1_execute
+    main.o(.text) refers to rt_memclr.o(.text) for __aeabi_memclr
+    main.o(.text) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    main.o(.text) refers to hal.o(.text) for halInit
+    main.o(.text) refers to chsys.o(.text) for chSysInit
+    main.o(.text) refers to flash.o(.text) for setup_FLASH()
+    main.o(.text) refers to externalinterrupt.o(.text) for setup_ExternalInterrupt()
+    main.o(.text) refers to gcs.o(.text) for setup_Mavlink()
+    main.o(.text) refers to racecontrol.o(.text) for init_Racecontrol()
+    main.o(.text) refers to chthreads.o(.text) for chThdSleep
+    main.o(.text) refers to main.o(.data) for ledToggle
+    main.o(.ARM.exidx) refers to main.o(.text) for .text
+    racecontrol.o(.text) refers to rt_memclr.o(.text) for __aeabi_memclr
+    racecontrol.o(.text) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    racecontrol.o(.text) refers to gcs.o(.text) for send_race_status(unsigned char, unsigned char)
+    racecontrol.o(.text) refers to chvt.o(.text) for chVTSetI
+    racecontrol.o(.text) refers to racecontrol.o(.data) for ms_count
+    racecontrol.o(.text) refers to racecontrol.o(.bss) for raceStartTimer
+    racecontrol.o(.text) refers to chthreads.o(.text) for chThdSleep
+    racecontrol.o(.text) refers to gpt.o(.text) for gptStart
+    racecontrol.o(.text) refers to gpt_lld.o(.bss) for GPTD2
+    racecontrol.o(.ARM.exidx) refers to racecontrol.o(.text) for .text
+    racecontrol.o(.data) refers to racecontrol.o(.text) for gpt2_callback(GPTDriver*)
+    externalinterrupt.o(.text) refers to ext.o(.text) for extStart
+    externalinterrupt.o(.text) refers to externalinterrupt.o(.constdata) for extcfg
+    externalinterrupt.o(.text) refers to ext_lld.o(.data) for EXTD1
+    externalinterrupt.o(.ARM.exidx) refers to externalinterrupt.o(.text) for .text
+    externalinterrupt.o(.constdata) refers to racecontrol.o(.text) for button_interrupt(EXTDriver*, unsigned)
+    gcs.o(.text) refers to rt_memcpy_w.o(.text) for __aeabi_memcpy4
+    gcs.o(.text) refers to rt_memclr.o(.text) for __aeabi_memclr
+    gcs.o(.text) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    gcs.o(.text) refers to chqueues.o(.text) for chOQWriteTimeout
+    gcs.o(.text) refers to chthreads.o(.text) for chThdSleep
+    gcs.o(.text) refers to chevents.o(.text) for chEvtRegisterMask
+    gcs.o(.text) refers to racecontrol.o(.text) for startRace(unsigned char)
+    gcs.o(.text) refers to gcs.o(.bss) for m_mavlink_buffer
+    gcs.o(.text) refers to gcs.o(.constdata) for mavlink_message_crcs
+    gcs.o(.text) refers to serial_lld.o(.bss) for SD2
+    gcs.o(.text) refers to chschd.o(.bss) for rlist
+    gcs.o(.text) refers to gcs.o(.data) for c
+    gcs.o(.text) refers to serial.o(.text) for sdStart
+    gcs.o(.text) refers to pal_lld.o(.text) for _pal_lld_setgroupmode
+    gcs.o(.ARM.exidx) refers to gcs.o(.text) for .text
+    stm32f4xx_flash.o(.ARM.exidx) refers to stm32f4xx_flash.o(.text) for .text
+    flash.o(.text) refers to stm32f4xx_flash.o(.text) for FLASH_Unlock
+    flash.o(.text) refers to eeprom.o(.text) for EE_Init()
+    flash.o(.text) refers to flash.o(.data) for VirtAddVarTab
+    flash.o(.ARM.exidx) refers to flash.o(.text) for .text
+    eeprom.o(.text) refers to stm32f4xx_flash.o(.text) for FLASH_EraseSector
+    eeprom.o(.text) refers to flash.o(.data) for VirtAddVarTab
+    eeprom.o(.text) refers to eeprom.o(.data) for DataVar
+    eeprom.o(.ARM.exidx) refers to eeprom.o(.text) for .text
+    rt_memcpy_v6.o(.text) refers to rt_memcpy_w.o(.text) for __aeabi_memcpy4
+    rt_memclr.o(.text) refers to rt_memclr_w.o(.text) for _memset_w
+    __main.o(!!!main) refers to rtentry.o(.ARM.Collect$$rtentry$$00000000) for __rt_entry
+    rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$0000000A) for __rt_entry_li
+    rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$0000000D) for __rt_entry_main
+    rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$0000000C) for __rt_entry_postli_1
+    rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$00000009) for __rt_entry_postsh_1
+    rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$00000002) for __rt_entry_presh_1
+    rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry5.o(.ARM.Collect$$rtentry$$00000005) for __rt_entry_sh
+    rtentry2.o(.ARM.Collect$$rtentry$$00000008) refers to boardinit2.o(.text) for _platform_post_stackheap_init
+    rtentry2.o(.ARM.Collect$$rtentry$$0000000A) refers to libinit.o(.ARM.Collect$$libinit$$00000000) for __rt_lib_init
+    rtentry2.o(.ARM.Collect$$rtentry$$0000000B) refers to boardinit3.o(.text) for _platform_post_lib_init
+    rtentry2.o(.ARM.Collect$$rtentry$$0000000D) refers to main.o(.text) for main
+    rtentry2.o(.ARM.Collect$$rtentry$$0000000D) refers to exit.o(.text) for exit
+    rtentry2.o(.ARM.exidx) refers to rtentry2.o(.ARM.Collect$$rtentry$$00000001) for .ARM.Collect$$rtentry$$00000001
+    rtentry2.o(.ARM.exidx) refers to rtentry2.o(.ARM.Collect$$rtentry$$00000008) for .ARM.Collect$$rtentry$$00000008
+    rtentry2.o(.ARM.exidx) refers to rtentry2.o(.ARM.Collect$$rtentry$$0000000A) for .ARM.Collect$$rtentry$$0000000A
+    rtentry2.o(.ARM.exidx) refers to rtentry2.o(.ARM.Collect$$rtentry$$0000000B) for .ARM.Collect$$rtentry$$0000000B
+    rtentry2.o(.ARM.exidx) refers to rtentry2.o(.ARM.Collect$$rtentry$$0000000D) for .ARM.Collect$$rtentry$$0000000D
+    rtentry4.o(.ARM.Collect$$rtentry$$00000004) refers to sys_stackheap_outer.o(.text) for __user_setup_stackheap
+    rtentry4.o(.ARM.exidx) refers to rtentry4.o(.ARM.Collect$$rtentry$$00000004) for .ARM.Collect$$rtentry$$00000004
+    rtentry5.o(.ARM.Collect$$rtentry$$00000005) refers to rtentry5.o(.ARM.Collect$$rtentry$$00002716) for __lit__00000000
+    rtentry5.o(.ARM.Collect$$rtentry$$00002716) refers to cstartup.o(CSTACK) for __initial_sp
+    rtentry5.o(__vectab_stack_and_reset_sym_area) refers to cstartup.o(CSTACK) for __initial_sp
+    rtentry5.o(__vectab_stack_and_reset_sym_area) refers to __main.o(!!!main) for __main
+    rtentry5.o(.ARM.exidx) refers to rtentry5.o(.ARM.Collect$$rtentry$$00000005) for .ARM.Collect$$rtentry$$00000005
+    rtentry5.o(.ARM.exidx) refers to rtentry5.o(.ARM.Collect$$rtentry$$00002716) for .ARM.Collect$$rtentry$$00002716
+    sys_stackheap_outer.o(.text) refers to libspace.o(.text) for __user_perproc_libspace
+    sys_stackheap_outer.o(.text) refers to cstartup.o(.text) for __user_initial_stackheap
+    exit.o(.text) refers to rtexit.o(.ARM.Collect$$rtexit$$00000000) for __rt_exit
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000002C) for __rt_lib_init_alloca_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000002A) for __rt_lib_init_argv_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000019) for __rt_lib_init_atexit_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000001F) for __rt_lib_init_clock_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000030) for __rt_lib_init_cpp_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000002E) for __rt_lib_init_exceptions_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000001) for __rt_lib_init_fp_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000001D) for __rt_lib_init_fp_trap_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000021) for __rt_lib_init_getenv_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000008) for __rt_lib_init_heap_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000F) for __rt_lib_init_lc_collate_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000011) for __rt_lib_init_lc_ctype_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000013) for __rt_lib_init_lc_monetary_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000015) for __rt_lib_init_lc_numeric_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000017) for __rt_lib_init_lc_time_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000C) for __rt_lib_init_rand_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000031) for __rt_lib_init_return
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000001B) for __rt_lib_init_signal_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000023) for __rt_lib_init_stdio_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000A) for __rt_lib_init_user_alloc_1
+    libspace.o(.text) refers to libspace.o(.bss) for __libspace_start
+    rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for __rt_exit_exit
+    rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for __rt_exit_ls
+    rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000002) for __rt_exit_prels_1
+    rtexit.o(.ARM.exidx) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for __rt_exit_exit
+    rtexit.o(.ARM.exidx) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for __rt_exit_ls
+    rtexit.o(.ARM.exidx) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000002) for __rt_exit_prels_1
+    rtexit.o(.ARM.exidx) refers to rtexit.o(.ARM.Collect$$rtexit$$00000000) for .ARM.Collect$$rtexit$$00000000
+    libinit2.o(.ARM.Collect$$libinit$$00000001) refers to fpinit.o(x$fpl$fpinit) for _fp_init
+    libinit2.o(.ARM.Collect$$libinit$$0000000E) refers to libinit2.o(.ARM.Collect$$libinit$$0000000D) for .ARM.Collect$$libinit$$0000000D
+    libinit2.o(.ARM.Collect$$libinit$$00000010) refers to libinit2.o(.ARM.Collect$$libinit$$0000000D) for .ARM.Collect$$libinit$$0000000D
+    libinit2.o(.ARM.Collect$$libinit$$00000012) refers to libinit2.o(.ARM.Collect$$libinit$$0000000D) for .ARM.Collect$$libinit$$0000000D
+    libinit2.o(.ARM.Collect$$libinit$$00000014) refers to libinit2.o(.ARM.Collect$$libinit$$0000000D) for .ARM.Collect$$libinit$$0000000D
+    libinit2.o(.ARM.Collect$$libinit$$00000016) refers to libinit2.o(.ARM.Collect$$libinit$$0000000D) for .ARM.Collect$$libinit$$0000000D
+    libinit2.o(.ARM.Collect$$libinit$$00000024) refers to argv_veneer.o(.emb_text) for __ARM_argv_veneer
+    libinit2.o(.ARM.Collect$$libinit$$00000025) refers to argv_veneer.o(.emb_text) for __ARM_argv_veneer
+    rtexit2.o(.ARM.Collect$$rtexit$$00000003) refers to libshutdown.o(.ARM.Collect$$libshutdown$$00000000) for __rt_lib_shutdown
+    rtexit2.o(.ARM.Collect$$rtexit$$00000004) refers to sys_exit.o(.text) for _sys_exit
+    rtexit2.o(.ARM.exidx) refers to rtexit2.o(.ARM.Collect$$rtexit$$00000001) for .ARM.Collect$$rtexit$$00000001
+    rtexit2.o(.ARM.exidx) refers to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for .ARM.Collect$$rtexit$$00000003
+    rtexit2.o(.ARM.exidx) refers to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for .ARM.Collect$$rtexit$$00000004
+    argv_veneer.o(.emb_text) refers to no_argv.o(.text) for __ARM_get_argv
+    sys_exit.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_exit.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    _get_argv_nomalloc.o(.text) refers (Special) to hrguard.o(.text) for __heap_region$guard
+    _get_argv_nomalloc.o(.text) refers to defsig_rtmem_outer.o(.text) for __rt_SIGRTMEM
+    _get_argv_nomalloc.o(.text) refers to sys_command.o(.text) for _sys_command_string
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$00000006) for __rt_lib_shutdown_fp_trap_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$0000000E) for __rt_lib_shutdown_heap_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$0000000F) for __rt_lib_shutdown_return
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$00000009) for __rt_lib_shutdown_signal_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$00000003) for __rt_lib_shutdown_stdio_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$0000000B) for __rt_lib_shutdown_user_alloc_1
+    sys_command.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_command.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    defsig_rtmem_outer.o(.text) refers to defsig_rtmem_inner.o(.text) for __rt_SIGRTMEM_inner
+    defsig_rtmem_outer.o(.text) refers to defsig_exit.o(.text) for __sig_exit
+    defsig_rtmem_formal.o(.text) refers to rt_raise.o(.text) for __rt_raise
+    rt_raise.o(.text) refers to __raise.o(.text) for __raise
+    rt_raise.o(.text) refers to sys_exit.o(.text) for _sys_exit
+    defsig_exit.o(.text) refers to sys_exit.o(.text) for _sys_exit
+    defsig_rtmem_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    __raise.o(.text) refers to defsig.o(CL$$defsig) for __default_signal_handler
+    defsig_general.o(.text) refers to sys_wrch.o(.text) for _ttywrch
+    sys_wrch.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_wrch.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    defsig.o(CL$$defsig) refers to defsig_rtmem_inner.o(.text) for __rt_SIGRTMEM_inner
+    defsig_abrt_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_fpe_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_rtred_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_stak_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_pvfn_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_cppl_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_segv_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_other.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+
+
+==============================================================================
+
+Removing Unused input sections from the image.
+
+    Removing board.o(.emb_text), (8 bytes).
+    Removing chcond.o(.text), (348 bytes).
+    Removing chmboxes.o(.text), (578 bytes).
+    Removing chmsg.o(.text), (172 bytes).
+    Removing chregistry.o(.text), (72 bytes).
+    Removing chsem.o(.text), (492 bytes).
+    Removing adc.o(.emb_text), (8 bytes).
+    Removing hal.o(.emb_text), (8 bytes).
+    Removing pal.o(.emb_text), (8 bytes).
+    Removing pal.o(.text), (68 bytes).
+    Removing pwm.o(.emb_text), (8 bytes).
+    Removing serial.o(.emb_text), (8 bytes).
+    Removing spi.o(.emb_text), (8 bytes).
+    Removing i2c.o(.emb_text), (8 bytes).
+    Removing ext.o(.emb_text), (8 bytes).
+    Removing ext_lld.o(.emb_text), (8 bytes).
+    Removing mmc_spi.o(.emb_text), (8 bytes).
+    Removing tm.o(.emb_text), (8 bytes).
+    Removing gpt.o(.emb_text), (8 bytes).
+    Removing adc_lld.o(.emb_text), (8 bytes).
+    Removing hal_lld.o(.emb_text), (8 bytes).
+    Removing pal_lld.o(.emb_text), (8 bytes).
+    Removing pwm_lld.o(.emb_text), (8 bytes).
+    Removing serial_lld.o(.emb_text), (8 bytes).
+    Removing spi_lld.o(.emb_text), (8 bytes).
+    Removing stm32_dma.o(.emb_text), (8 bytes).
+    Removing i2c_lld.o(.emb_text), (8 bytes).
+    Removing gpt_lld.o(.emb_text), (8 bytes).
+    Removing test.o(.emb_text), (8 bytes).
+    Removing test.o(.text), (1584 bytes).
+    Removing test.o(.bss), (2256 bytes).
+    Removing test.o(.constdata), (20 bytes).
+    Removing test.o(.data), (72 bytes).
+    Removing testbmk.o(.text), (2324 bytes).
+    Removing testbmk.o(.bss), (116 bytes).
+    Removing testbmk.o(.constdata), (264 bytes).
+    Removing testbmk.o(.conststring), (396 bytes).
+    Removing testdyn.o(.text), (960 bytes).
+    Removing testdyn.o(.bss), (44 bytes).
+    Removing testdyn.o(.constdata), (64 bytes).
+    Removing testdyn.o(.conststring), (127 bytes).
+    Removing testevt.o(.text), (1142 bytes).
+    Removing testevt.o(.constdata), (76 bytes).
+    Removing testevt.o(.conststring), (78 bytes).
+    Removing testevt.o(.data), (8 bytes).
+    Removing testheap.o(.text), (652 bytes).
+    Removing testheap.o(.bss), (32 bytes).
+    Removing testheap.o(.constdata), (24 bytes).
+    Removing testheap.o(.conststring), (40 bytes).
+    Removing testmbox.o(.text), (1972 bytes).
+    Removing testmbox.o(.constdata), (24 bytes).
+    Removing testmbox.o(.conststring), (32 bytes).
+    Removing testmbox.o(.data), (40 bytes).
+    Removing testmsg.o(.text), (168 bytes).
+    Removing testmsg.o(.constdata), (24 bytes).
+    Removing testmsg.o(.conststring), (15 bytes).
+    Removing testmtx.o(.text), (2576 bytes).
+    Removing testmtx.o(.constdata), (164 bytes).
+    Removing testmtx.o(.conststring), (226 bytes).
+    Removing testmtx.o(.data), (40 bytes).
+    Removing testpools.o(.text), (168 bytes).
+    Removing testpools.o(.constdata), (24 bytes).
+    Removing testpools.o(.conststring), (28 bytes).
+    Removing testpools.o(.data), (12 bytes).
+    Removing testqueues.o(.text), (1508 bytes).
+    Removing testqueues.o(.constdata), (44 bytes).
+    Removing testqueues.o(.conststring), (43 bytes).
+    Removing testqueues.o(.data), (64 bytes).
+    Removing testsem.o(.text), (1260 bytes).
+    Removing testsem.o(.constdata), (84 bytes).
+    Removing testsem.o(.conststring), (106 bytes).
+    Removing testsem.o(.data), (12 bytes).
+    Removing testthd.o(.text), (936 bytes).
+    Removing testthd.o(.constdata), (84 bytes).
+    Removing testthd.o(.conststring), (95 bytes).
+    Removing main.o(.emb_text), (8 bytes).
+    Removing main.o(.ARM.exidx), (8 bytes).
+    Removing chprintf.o(.text), (724 bytes).
+    Removing racecontrol.o(.emb_text), (8 bytes).
+    Removing racecontrol.o(.ARM.exidx), (8 bytes).
+    Removing externalinterrupt.o(.emb_text), (8 bytes).
+    Removing externalinterrupt.o(.ARM.exidx), (8 bytes).
+    Removing gcs.o(.emb_text), (8 bytes).
+    Removing gcs.o(.ARM.exidx), (8 bytes).
+    Removing stm32f4xx_flash.o(.emb_text), (8 bytes).
+    Removing stm32f4xx_flash.o(.ARM.exidx), (8 bytes).
+    Removing flash.o(.emb_text), (8 bytes).
+    Removing flash.o(.ARM.exidx), (8 bytes).
+    Removing eeprom.o(.emb_text), (8 bytes).
+    Removing eeprom.o(.ARM.exidx), (8 bytes).
+
+90 unused section(s) (total 22778 bytes) removed from the image.

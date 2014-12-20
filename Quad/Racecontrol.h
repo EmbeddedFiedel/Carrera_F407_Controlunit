@@ -17,3 +17,4 @@ void button_interrupt(EXTDriver *extp, expchannel_t channel);
 void startRace(uint8_t racenumber);
 void stopRace(uint8_t racenumber);
 bool getRaceStartedOrStarting(void);
+uint32_t resendLapTime(uint8_t bahn, uint8_t runde);

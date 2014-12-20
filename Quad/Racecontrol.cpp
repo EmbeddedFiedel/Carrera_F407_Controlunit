@@ -177,27 +177,31 @@ void rx_channel1_interrupt(EXTDriver *extp, expchannel_t channel) {
 		(void)extp;
 		(void)channel;
 		chSysLockFromIsr();
-		if (race_started == true)
+		//chThdSleepMilliseconds(5);
+		if (palReadPad(GPIOE, 10) == PAL_HIGH)
 		{
-			if (firstLap_1 == true)
+			if (race_started == true)
 			{
-				firstLap_1 = false;
-				chSysUnlockFromIsr();
-			}	
+				if (firstLap_1 == true)
+				{
+					firstLap_1 = false;
+					chSysUnlockFromIsr();
+				}	
+				else
+				{
+					lapTimes_1[lapCounter_1] = ms_count-lastLapTime1;
+					lastLapTime1 = ms_count;
+					lapCounter_1++;
+					chSysUnlockFromIsr();
+					send_laptime(lapTimes_1[lapCounter_1-1],0,1,lapCounter_1);
+				}
+				
+			}
 			else
 			{
-				lapTimes_1[lapCounter_1] = ms_count-lastLapTime1;
-				lastLapTime1 = ms_count;
-				lapCounter_1++;
 				chSysUnlockFromIsr();
-				send_laptime(lapTimes_1[lapCounter_1-1],0,1,lapCounter_1);
+				//Fehlstart Handling tbd.
 			}
-			
-		}
-		else
-		{
-			chSysUnlockFromIsr();
-			//Fehlstart Handling tbd.
 		}
 		
 }
@@ -206,6 +210,10 @@ void rx_channel2_interrupt(EXTDriver *extp, expchannel_t channel) {
 		(void)extp;
 		(void)channel;
 		 	chSysLockFromIsr();
+	
+		
+		if (palReadPad(GPIOE, 12) == PAL_HIGH)
+		{
 		if (race_started == true)
 		{
 			if (firstLap_2 == true)
@@ -227,7 +235,7 @@ void rx_channel2_interrupt(EXTDriver *extp, expchannel_t channel) {
 			chSysUnlockFromIsr(); 
 			//Fehlstart Handling tbd.
 		}
-		
+	}
 }
 
 
@@ -344,5 +352,17 @@ bool getRaceStartedOrStarting(void)
 	else
 	{
 		return false;	
+	}
+}
+
+uint32_t resendLapTime(uint8_t bahn, uint8_t runde)
+{
+	if(bahn==1)
+	{
+		send_laptime(lapTimes_1[runde-1],0,bahn,runde);
+	}
+	else if(bahn == 2)
+	{
+		send_laptime(lapTimes_2[runde-1],0,bahn,runde);
 	}
 }
